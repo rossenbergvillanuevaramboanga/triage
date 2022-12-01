@@ -1,11 +1,17 @@
 package it.prova.triage.dto;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import it.prova.triage.model.Ruolo;
 import it.prova.triage.model.StatoUtente;
+import it.prova.triage.model.Utente;
 
 public class UtenteDTO {
 
@@ -31,17 +37,31 @@ public class UtenteDTO {
 
 	private StatoUtente stato;
 
+	private Long[] ruoliIds;
+
 	public UtenteDTO() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UtenteDTO(Long id, String username, String password,String confermaPassword, String nome, String cognome,
+	public UtenteDTO(Long id, String username, String password, String confermaPassword, String nome, String cognome,
 			LocalDate dataRegistrazione, StatoUtente stato) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.confermaPassword = confermaPassword;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataRegistrazione = dataRegistrazione;
+		this.stato = stato;
+	}
+
+	public UtenteDTO(Long id, String username, String password, String nome, String cognome,
+			LocalDate dataRegistrazione, StatoUtente stato) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dataRegistrazione = dataRegistrazione;
@@ -111,7 +131,34 @@ public class UtenteDTO {
 	public void setStato(StatoUtente stato) {
 		this.stato = stato;
 	}
-	
-	
+
+	public Utente buildUtenteModel(boolean includeRuoli) {
+		Utente result = new Utente(id, username, confermaPassword, nome, cognome, dataRegistrazione, stato);
+		if (includeRuoli && ruoliIds != null)
+			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
+		return result;
+
+	}
+
+	public static UtenteDTO buildUtenteDTOFromModel(Utente utenteModel) {
+		UtenteDTO result = new UtenteDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getPassword(),
+				utenteModel.getNome(), utenteModel.getCognome(), utenteModel.getDataRegistrazione(),
+				utenteModel.getStato());
+
+		if (!utenteModel.getRuoli().isEmpty())
+			result.ruoliIds = utenteModel.getRuoli().stream().map(r -> r.getId()).collect(Collectors.toList())
+					.toArray(new Long[] {});
+
+		return result;
+	}
+
+	public static List<UtenteDTO> buildUtenteDTOListFromModelList(List<Utente> modelList) {
+		return modelList.stream().map(entity -> UtenteDTO.buildUtenteDTOFromModel(entity)).collect(Collectors.toList());
+	}
+
+	public static Set<UtenteDTO> buildUtenteDTOSetFromModelSet(Set<Utente> modelList) {
+		return (Set<UtenteDTO>) modelList.stream().map(entity -> UtenteDTO.buildUtenteDTOFromModel(entity))
+				.collect(Collectors.toSet());
+	}
 
 }
