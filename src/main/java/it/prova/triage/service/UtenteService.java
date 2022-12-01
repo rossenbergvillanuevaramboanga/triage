@@ -14,5 +14,6 @@ public interface UtenteService {
 	public void inserisciNuovo(Utente utenteInstance);
 	public void rimuovi(Utente utenteInstance);
 	public List<Utente> findByExample(Utente buildUtenteModel);
+	public Utente findByUsername(String string);
 
 }

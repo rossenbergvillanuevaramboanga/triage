@@ -69,4 +69,10 @@ public class UtenteServiceImpl implements UtenteService {
 		return listAllUtenti();
 	}
 
+	@Override
+	public Utente findByUsername(String username) {
+		// TODO Auto-generated method stub
+		return repository.findByUsername(username).orElse(null);
+	}
+
 }
