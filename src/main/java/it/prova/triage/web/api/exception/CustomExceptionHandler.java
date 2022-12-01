@@ -56,6 +56,32 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
 	
+	//PazienteNotFoundException
+	public ResponseEntity<Object> handlePazienteNotFoundException(PazienteNotFoundException ex, WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.NOT_FOUND);
+
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
+	
+	//PazienteDeleteException
+	public ResponseEntity<Object> handlePazienteDeleteException(PazienteDeleteException ex, WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.FORBIDDEN);
+
+		return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+	}
+	
+	
+	
+	
+	
 	
 		
 	
