@@ -12,5 +12,6 @@ public interface PazienteService {
 	public Paziente aggiorna(Paziente pazienteInstance);
 	public void inserisciNuovo(Paziente pazienteInstance);
 	public void rimuovi(Paziente pazienteInstance);
+	public Paziente findByCodiceFiscale(String string);
 
 }

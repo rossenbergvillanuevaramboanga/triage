@@ -69,7 +69,7 @@ public class UtenteServiceImpl implements UtenteService {
 		return listAllUtenti();
 	}
 
-	@Override
+	@Transactional(readOnly = true)
 	public Utente findByUsername(String username) {
 		// TODO Auto-generated method stub
 		return repository.findByUsername(username).orElse(null);

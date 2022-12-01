@@ -88,17 +88,12 @@ public class Utente {
 		this.ruoli = ruoli;
 	}
 	
-	
-	
-	
-
-	public Utente(String username, String password, String nome, String cognome, LocalDate dataRegistrazione) {
+	public Utente(String username, String password, String nome, String cognome) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.nome = nome;
 		this.cognome = cognome;
-		this.dataRegistrazione = dataRegistrazione;
 	}
 
 	public Long getId() {

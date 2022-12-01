@@ -56,4 +56,10 @@ public class PazienteServiceImpl implements PazienteService {
 		repository.delete(pazienteInstance);
 	}
 
+	@Transactional(readOnly = true)
+	public Paziente findByCodiceFiscale(String string) {
+		// TODO Auto-generated method stub
+		return repository.findByCodicefiscale(string).orElse(null);
+	}
+
 }
