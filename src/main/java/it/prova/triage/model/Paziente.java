@@ -14,24 +14,27 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "paziente")
 public class Paziente {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	private Long id;
+
+	@Column(name = "nome")
 	private String nome;
-	
+
 	@Column(name = "cognome")
 	private String cognome;
-	
+
 	@Column(name = "codicefiscale")
 	private String codiceFiscale;
-	
+
 	@Column(name = "dataregistrazione")
 	private LocalDate dataRegistrazione;
-	
+
 	@Enumerated(EnumType.STRING)
 	private StatoPaziente stato;
-	
+
 	public Paziente() {
 		// TODO Auto-generated constructor stub
 	}
@@ -44,6 +47,25 @@ public class Paziente {
 		this.codiceFiscale = codiceFiscale;
 		this.dataRegistrazione = dataRegistrazione;
 		this.stato = stato;
+	}
+
+	public Paziente(Long id, String nome, String cognome, String codiceFiscale, LocalDate dataRegistrazione,
+			StatoPaziente stato) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.codiceFiscale = codiceFiscale;
+		this.dataRegistrazione = dataRegistrazione;
+		this.stato = stato;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -85,6 +107,5 @@ public class Paziente {
 	public void setStato(StatoPaziente stato) {
 		this.stato = stato;
 	}
-	
 
 }
