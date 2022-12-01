@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "utente")
 public class Utente {
@@ -149,6 +150,30 @@ public class Utente {
 
 	public void setRuoli(Set<Ruolo> ruoli) {
 		this.ruoli = ruoli;
+	}
+	
+	public boolean isAdmin() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_ADMIN))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean isSubOperator() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_SUB_OPERATOR))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean isAttivo() {
+		return this.stato != null && this.stato.equals(StatoUtente.ATTIVO);
+	}
+
+	public boolean isDisabilitato() {
+		return this.stato != null && this.stato.equals(StatoUtente.DISABILITATO);
 	}
 
 }

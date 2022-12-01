@@ -63,5 +63,10 @@ public class UtenteServiceImpl implements UtenteService {
 	public void rimuovi(Utente utenteInstance) {
 		repository.delete(utenteInstance);
 	}
+	
+	@Transactional(readOnly = true)
+	public List<Utente> findByExample(Utente example) {
+		return listAllUtenti();
+	}
 
 }
