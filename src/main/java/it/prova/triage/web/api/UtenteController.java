@@ -50,6 +50,7 @@ public class UtenteController {
 	}
 
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
 	public UtenteDTO createUtente(@Valid @RequestBody UtenteDTO utenteInput) {
 
 		if (utenteInput.getId() != null)
@@ -67,9 +68,9 @@ public class UtenteController {
 		return UtenteDTO.buildUtenteDTOFromModel(utenteService.caricaSingoloUtente(idUtente));
 	}
 
-	@PostMapping("/search")
-	public List<UtenteDTO> search(@RequestBody UtenteDTO example) {
-		return UtenteDTO.buildUtenteDTOListFromModelList(utenteService.findByExample(example.buildUtenteModel(true)));
+	@GetMapping
+	public List<UtenteDTO> getAll() {
+		return UtenteDTO.buildUtenteDTOListFromModelList(utenteService.listAllUtenti());
 	}
 
 	@PutMapping("/{id}")
