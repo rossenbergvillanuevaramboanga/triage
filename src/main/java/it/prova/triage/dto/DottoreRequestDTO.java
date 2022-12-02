@@ -1,5 +1,8 @@
 package it.prova.triage.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DottoreRequestDTO {
 
 	private String codiceDottore;
@@ -12,6 +15,11 @@ public class DottoreRequestDTO {
 	public DottoreRequestDTO(String codiceDottore, String codiceFiscalePaziente) {
 		super();
 		this.codiceDottore = codiceDottore;
+		this.codiceFiscalePaziente = codiceFiscalePaziente;
+	}
+	
+	public DottoreRequestDTO(String codiceFiscalePaziente) {
+		super();
 		this.codiceFiscalePaziente = codiceFiscalePaziente;
 	}
 

@@ -7,9 +7,12 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import it.prova.triage.model.Paziente;
 import it.prova.triage.model.StatoPaziente;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PazienteDTO {
 
 	private Long id;

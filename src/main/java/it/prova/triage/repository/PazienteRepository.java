@@ -8,6 +8,6 @@ import it.prova.triage.model.Paziente;
 
 public interface PazienteRepository extends CrudRepository<Paziente, Long> {
 
-	Optional<Paziente> findByCodicefiscale(String string);
+	Optional<Paziente> findByCodiceFiscale(String string);
 
 }

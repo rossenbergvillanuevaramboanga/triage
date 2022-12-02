@@ -1,5 +1,8 @@
 package it.prova.triage.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DottoreResponseDTO {
 	
 	private String nome;

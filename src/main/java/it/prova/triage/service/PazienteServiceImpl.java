@@ -59,7 +59,7 @@ public class PazienteServiceImpl implements PazienteService {
 	@Transactional(readOnly = true)
 	public Paziente findByCodiceFiscale(String string) {
 		// TODO Auto-generated method stub
-		return repository.findByCodicefiscale(string).orElse(null);
+		return repository.findByCodiceFiscale(string).orElse(null);
 	}
 
 }

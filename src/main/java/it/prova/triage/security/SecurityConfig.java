@@ -45,6 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeHttpRequests()
 
 				.antMatchers("/api/auth/login").permitAll()
+				
+				.antMatchers("/h2-console/**").permitAll()
 
 				// tutti gli utenti autenticati possono richiedere le info
 				.antMatchers("/api/utente/userInfo").authenticated()
@@ -66,6 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// Adding the JWT filter
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+		
+		http.headers().frameOptions().disable();
 	}
 
 }

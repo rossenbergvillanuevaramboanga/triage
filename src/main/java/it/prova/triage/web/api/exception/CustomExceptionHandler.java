@@ -10,10 +10,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
@@ -76,6 +78,39 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		body.put("status", HttpStatus.FORBIDDEN);
 
 		return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+	}
+	
+	//DottoreNotFoundException
+	public ResponseEntity<Object> handleDottoreNotFoundException(DottoreNotFoundException ex, WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.NOT_FOUND);
+
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
+	
+	//DottoreNotAvailbleException
+	public ResponseEntity<Object> handleDottoreNotAvailbleException(DottoreNotAvailbleException ex, WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.NOT_FOUND);
+
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
+	
+	//ErrorConnectionException
+	public ResponseEntity<Object> handleErrorConnectionException(ErrorConnectionException ex, WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.BAD_REQUEST);
+
+		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
 	
 	

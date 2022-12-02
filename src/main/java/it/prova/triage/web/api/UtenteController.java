@@ -63,9 +63,14 @@ public class UtenteController {
 	}
 
 	@GetMapping("/{id}")
-	public UtenteDTO findById(@PathVariable(value = "id", required = true) Long idUtente) {
+	public UtenteDTO findById(@PathVariable(value = "id", required = true) Long id) {
+		
+		Utente utente = utenteService.caricaSingoloUtente(id);
 
-		return UtenteDTO.buildUtenteDTOFromModel(utenteService.caricaSingoloUtente(idUtente));
+		if (utente == null)
+			throw new UtenteNotFoundException("Utente not found con id: " + id);
+
+		return UtenteDTO.buildUtenteDTOFromModel(utente);
 	}
 
 	@GetMapping
