@@ -1,7 +1,6 @@
 package it.prova.triage.web.api;
 
 import java.util.List;
-import java.util.function.Function;
 
 import javax.validation.Valid;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import it.prova.triage.dto.DottoreRequestDTO;
@@ -26,9 +24,7 @@ import it.prova.triage.dto.PazienteDTO;
 import it.prova.triage.model.Paziente;
 import it.prova.triage.model.StatoPaziente;
 import it.prova.triage.service.PazienteService;
-import it.prova.triage.web.api.exception.DottoreNotAvailbleException;
 import it.prova.triage.web.api.exception.DottoreNotFoundException;
-import it.prova.triage.web.api.exception.ErrorConnectionException;
 import it.prova.triage.web.api.exception.IdNotNullForInsertException;
 import it.prova.triage.web.api.exception.PazienteDeleteException;
 import it.prova.triage.web.api.exception.PazienteNotFoundException;
@@ -125,44 +121,19 @@ public class PazienteController {
 
 		// Verifica se il dottore prescelto è disponibile contattando l'API esterna
 		ResponseEntity<DottoreResponseDTO> response = webClient.get()
-				.uri("/verifica/" + pazienteInput.getCodiceDottore())
-				.retrieve()
+				.uri("/verifica/" + pazienteInput.getCodiceDottore()).retrieve()
 				.onStatus(HttpStatus::is4xxClientError, responseEntity -> {
 					throw new DottoreNotFoundException("Dottore not found");
-				})
-				.toEntity(DottoreResponseDTO.class)
-				.block();
-
-		// Gestione della risposta
-//		if (response.getStatusCode() != HttpStatus.OK) {
-//			if (response.getStatusCode() == HttpStatus.NOT_FOUND)
-//				throw new DottoreNotFoundException("Dottore non trovato");
-//			if (response.getStatusCode() == HttpStatus.FORBIDDEN)
-//				throw new DottoreNotAvailbleException("Dottore non disponibile");
-//			else
-//				throw new ErrorConnectionException("Errore nella connessione");
-//		}
+				}).toEntity(DottoreResponseDTO.class).block();
 
 		// Assegnazione del Dottore al paziente
 		response = webClient.post().uri("/impostaInVisita/")
 				.body(Mono.just(
 						new DottoreRequestDTO(pazienteInput.getCodiceDottore(), pazienteInput.getCodiceFiscale())),
 						DottoreRequestDTO.class)
-				.retrieve()
-				.onStatus(HttpStatus::is4xxClientError, responseEntity -> {
+				.retrieve().onStatus(HttpStatus::is4xxClientError, responseEntity -> {
 					throw new DottoreNotFoundException("Dottore not found");
-				})
-				.toEntity(DottoreResponseDTO.class).block();
-
-//		// Gestione della risposta
-//		if (response.getStatusCode() != HttpStatus.OK) {
-//			if (response.getStatusCode() == HttpStatus.NOT_FOUND)
-//				throw new DottoreNotFoundException("Dottore non trovato");
-//			if (response.getStatusCode() == HttpStatus.FORBIDDEN)
-//				throw new DottoreNotAvailbleException("Dottore non disponibile");
-//			else
-//				throw new ErrorConnectionException("Errore nella connessione");
-//		}
+				}).toEntity(DottoreResponseDTO.class).block();
 
 		// Update del paziente
 		paziente.setStato(StatoPaziente.IN_VISITA);
@@ -183,19 +154,11 @@ public class PazienteController {
 		if (!paziente.getStato().equals(StatoPaziente.IN_VISITA))
 			throw new PazienteNotFoundException("Paziente not IN VISITA con" + id);
 
-		ResponseEntity<DottoreResponseDTO> response = webClient.post().uri("/terminaVisita/")
+		webClient.post().uri("/terminaVisita/")
 				.body(Mono.just(new DottoreRequestDTO(paziente.getCodiceFiscale())), DottoreRequestDTO.class).retrieve()
 				.onStatus(HttpStatus::is4xxClientError, responseEntity -> {
 					throw new DottoreNotFoundException("Dottore not found");
-				})
-				.toEntity(DottoreResponseDTO.class).block();
-
-//		// Gestione della risposta
-//		if (response.getStatusCode() != HttpStatus.OK) {
-//			if (response.getStatusCode() == HttpStatus.NOT_FOUND)
-//				throw new DottoreNotFoundException("Dottore non trovato");
-//			throw new ErrorConnectionException("Errore nella connessione");
-//		}
+				}).toEntity(DottoreRequestDTO.class).block();
 
 		// Update del paziente
 		paziente.setStato(StatoPaziente.RICOVERATO);
@@ -220,20 +183,11 @@ public class PazienteController {
 		if (pazienteDT0.getCodiceDottore() != null) {
 
 			// Verifica se il dottore prescelto è disponibile contattando l'API esterna
-			ResponseEntity<DottoreResponseDTO> response = webClient.post().uri("/terminaVisita/")
+			webClient.post().uri("/terminaVisita/")
 					.body(Mono.just(new DottoreRequestDTO(paziente.getCodiceFiscale())), DottoreRequestDTO.class)
-					.retrieve()
-					.onStatus(HttpStatus::is4xxClientError, responseEntity -> {
+					.retrieve().onStatus(HttpStatus::is4xxClientError, responseEntity -> {
 						throw new DottoreNotFoundException("Dottore not found");
-					})
-					.toEntity(DottoreResponseDTO.class).block();
-
-			// Gestione della risposta
-//			if (response.getStatusCode() != HttpStatus.OK) {
-//				if (response.getStatusCode() == HttpStatus.NOT_FOUND)
-//					throw new DottoreNotFoundException("Il paziente non ha il dottore non trovato");
-//				throw new ErrorConnectionException("Errore nella connessione");
-//			}
+					}).toEntity(DottoreResponseDTO.class).block();
 		}
 
 		// Update del paziente
